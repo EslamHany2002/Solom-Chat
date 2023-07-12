@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1063708953506",
+    "project_id": "solom-chat",
+    "storage_bucket": "solom-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063708953506:android:cffffa850bf48b674ac0fb",
+        "android_client_info": {
+          "package_name": "com.example.message_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063708953506-dbcd01h03v7mkg3ub29g5tae6ush2ams.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDixCylprMuKWVY_UyH0EZX1YgSraVMhws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063708953506-dbcd01h03v7mkg3ub29g5tae6ush2ams.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
