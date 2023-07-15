@@ -108,7 +108,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
 
                       ListTile(
                         leading: Icon(Icons.info_outline , color: Color(0xff335061), size: 35,),
-                        title: Text("Email" , style: TextStyle(fontSize: 15),),
+                        title: Text("About" , style: TextStyle(fontSize: 15),),
                         subtitle: Text(widget.user.about , style: TextStyle(fontSize: 16),),
                       ),
 

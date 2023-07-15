@@ -30,7 +30,6 @@ class _ChatPageState extends State<ChatPage> {
   bool _showEmoji = false;
   bool _isUploading = false;
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -48,9 +47,9 @@ class _ChatPageState extends State<ChatPage> {
           }
         },
         child: Scaffold(
-          extendBodyBehindAppBar: true,
+          // extendBodyBehindAppBar: true,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Color(0xff223742),
             // flexibleSpace: _appBar(),
             leadingWidth: 35,
             toolbarHeight: 80,
@@ -61,13 +60,16 @@ class _ChatPageState extends State<ChatPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => ViewUserProfile(user: widget.user)));
+                        builder: (context) =>
+                            ViewUserProfile(user: widget.user)));
               },
               child: StreamBuilder(
                 stream: APIs.getUserInfo(widget.user),
                 builder: (context, AsyncSnapshot snapshot) {
                   final data = snapshot.data?.docs;
-                  final listOf = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                  final listOf =
+                      data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                          [];
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -77,9 +79,8 @@ class _ChatPageState extends State<ChatPage> {
                         child: CachedNetworkImage(
                           width: mq.height * 0.055,
                           height: mq.height * 0.055,
-                          imageUrl:
-                          listOf.isNotEmpty ?
-                          listOf[0].image
+                          imageUrl: listOf.isNotEmpty
+                              ? listOf[0].image
                               : widget.user.image,
                           errorWidget: (context, url, error) =>
                               const CircleAvatar(
@@ -94,9 +95,7 @@ class _ChatPageState extends State<ChatPage> {
                         children: [
                           Text(
                             listOf.isNotEmpty
-                                ?
-                            listOf[0].name
-
+                                ? listOf[0].name
                                 : widget.user.name,
                             style: const TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold),
@@ -105,11 +104,15 @@ class _ChatPageState extends State<ChatPage> {
                             height: 5,
                           ),
                           Text(
-                            listOf.isNotEmpty ? listOf[0].isOnline
-                                ?
-                            'Online'
-                                : My_Date.getLastActiveTime(context: context, lastActive: listOf[0].lastActive)
-                                : My_Date.getLastActiveTime(context: context, lastActive: widget.user.lastActive),
+                            listOf.isNotEmpty
+                                ? listOf[0].isOnline
+                                    ? 'Online'
+                                    : My_Date.getLastActiveTime(
+                                        context: context,
+                                        lastActive: listOf[0].lastActive)
+                                : My_Date.getLastActiveTime(
+                                    context: context,
+                                    lastActive: widget.user.lastActive),
                             style:
                                 TextStyle(color: Colors.white70, fontSize: 11),
                           ),
@@ -120,73 +123,6 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
             ),
-            // actions: [
-            //   IconButton(
-            //       padding: const EdgeInsets.symmetric(vertical: 20),
-            //       onPressed: () {},
-            //       icon: const Icon(Icons.phone)),
-            //   PopupMenuButton(
-            //       padding: const EdgeInsets.symmetric(vertical: 18),
-            //       iconSize: 28,
-            //       itemBuilder: (context) => [
-            //             const PopupMenuItem(
-            //               value: 1,
-            //               child: Text(
-            //                 "View contact",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 2,
-            //               child: Text(
-            //                 "Media, links, and docs",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 3,
-            //               child: Text(
-            //                 "Search",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 4,
-            //               child: Text(
-            //                 "Mute noftifications",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 5,
-            //               child: Text(
-            //                 "Disappearing messages",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 5,
-            //               child: Text(
-            //                 "Wallpaper",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //             const PopupMenuItem(
-            //               value: 5,
-            //               child: Text(
-            //                 "More",
-            //                 style: TextStyle(
-            //                     fontSize: 17, fontWeight: FontWeight.w500),
-            //               ),
-            //             ),
-            //           ]),
-            // ],
           ),
           body: Container(
             decoration: const BoxDecoration(
@@ -197,9 +133,9 @@ class _ChatPageState extends State<ChatPage> {
             ),
             child: Column(
               children: [
-                SizedBox(
-                  height: mq.height * .13,
-                ),
+                // SizedBox(
+                //   height: mq.height * .135,
+                // ),
                 Expanded(
                   child: StreamBuilder(
                       stream: APIs.getAllMessages(widget.user),
@@ -354,7 +290,13 @@ class _ChatPageState extends State<ChatPage> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(widget.user, _textController.text, Type.text);
+                if (_list.isEmpty) {
+                  APIs.sendFirstMessage(
+                      widget.user, _textController.text, Type.text);
+                } else {
+                  APIs.sendMessage(
+                      widget.user, _textController.text, Type.text);
+                }
                 _textController.text = '';
               }
             },
@@ -373,7 +315,4 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-
-
-
 }

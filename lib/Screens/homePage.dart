@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:message_application/Api/Apis.dart';
+import 'package:message_application/Helper/Dialog.dart';
 import 'package:message_application/Models/chat_users.dart';
 import 'package:message_application/Screens/Profile_page.dart';
 import 'package:message_application/Screens/Setting.dart';
@@ -80,14 +82,29 @@ class _HomePageState extends State<HomePage> {
               // backgroundColor: Color(0xff7354cb),
               elevation: 0,
               toolbarHeight: 80,
-              leading: IconButton(
-                iconSize: 30,
-                icon: const Icon(Icons.dehaze_rounded),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Setting()));
-                },
+              leading: Container(
+                width: 50,
+                child: IconButton(
+                  iconSize: 30,
+                  icon: const Icon(Icons.person),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new Profile_page(
+                                  user: APIs.me,
+                                )));
+                  },
+                ),
               ),
+              // leading: IconButton(
+              //   iconSize: 30,
+              //   icon: const Icon(Icons.dehaze_rounded),
+              //   onPressed: () {
+              //     Navigator.push(context,
+              //         MaterialPageRoute(builder: (context) => Setting()));
+              //   },
+              // ),
               title: _isSearching
                   ? TextField(
                       decoration: const InputDecoration(
@@ -134,23 +151,6 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-                Container(
-                  width: 50,
-                  child: IconButton(
-                    iconSize: 30,
-                    icon: const Icon(Icons.person),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => new Profile_page(
-                                    user: APIs.me,
-                                  )
-                          )
-                      );
-                    },
-                  ),
-                ),
               ],
               systemOverlayStyle: SystemUiOverlayStyle.dark,
             ),
@@ -160,58 +160,87 @@ class _HomePageState extends State<HomePage> {
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
-                color: Colors.white54,
+                color: Colors.white70,
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: Column(
                   children: [
                     Expanded(
-                      child: StreamBuilder(
-                          stream: APIs.getAllUsers(),
-                          builder: (context, AsyncSnapshot snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.waiting:
-                              case ConnectionState.none:
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: APIs.getmyUserId(),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                            case ConnectionState.none:
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
 
-                              case ConnectionState.active:
-                              case ConnectionState.done:
-                                final data = snapshot.data?.docs;
-                                _list = data
-                                        ?.map<ChatUser>(
-                                            (e) => ChatUser.fromJson(e.data()))
-                                        .toList() ??
-                                    [];
+                            case ConnectionState.active:
+                            case ConnectionState.done:
+                              return StreamBuilder(
+                                  stream: APIs.getAllUsers(snapshot.data?.docs
+                                          .map((e) => e.id)
+                                          .toList() ??
+                                      []),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                      case ConnectionState.none:
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
 
-                                if (_list.isNotEmpty) {
-                                  return ListView.builder(
-                                    itemCount: _isSearching
-                                        ? _searchList.length
-                                        : _list.length,
-                                    padding:
-                                        EdgeInsets.only(top: mq.height * .01),
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return Person(
-                                          user: _isSearching
-                                              ? _searchList[index]
-                                              : _list[index]);
-                                      // return Text("Name: ${list[index]}");
-                                    },
-                                  );
-                                } else {
-                                  return const Center(
-                                    child: Text(
-                                      "No Connections Found !",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  );
-                                }
-                            }
-                          }),
+                                      case ConnectionState.active:
+                                      case ConnectionState.done:
+                                        final data = snapshot.data?.docs;
+                                        _list = data
+                                                ?.map<ChatUser>((e) =>
+                                                    ChatUser.fromJson(e.data()))
+                                                .toList() ??
+                                            [];
+
+                                        if (_list.isNotEmpty) {
+                                          return ListView.builder(
+                                            itemCount: _isSearching
+                                                ? _searchList.length
+                                                : _list.length,
+                                            padding: EdgeInsets.only(
+                                                top: mq.height * .01),
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            itemBuilder: (context, index) {
+                                              return Person(
+                                                  user: _isSearching
+                                                      ? _searchList[index]
+                                                      : _list[index]);
+                                              // return Text("Name: ${list[index]}");
+                                            },
+                                          );
+                                        } else {
+                                          return const Center(
+                                            child: Text(
+                                              "No Connections Found !",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                          );
+                                        }
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    );
+                                  });
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -222,8 +251,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(bottom: 10),
               child: FloatingActionButton(
                 onPressed: () async {
-                  await APIs.auth.signOut();
-                  await GoogleSignIn().signOut();
+                  _addChatUser();
                 },
                 child: const Icon(
                   Icons.add_comment_rounded,
@@ -235,5 +263,69 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _addChatUser() {
+    String email = '';
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              contentPadding:
+                  EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.person_add,
+                    color: Colors.blue,
+                    size: 28,
+                  ),
+                  Text(" Add User")
+                ],
+              ),
+              content: TextFormField(
+                maxLines: null,
+                onChanged: (value) => email = value,
+                decoration: InputDecoration(
+                    hintText: 'Email Id',
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: Colors.blue,
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
+              ),
+              actions: [
+                MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                  ),
+                ),
+                MaterialButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    if (email.isNotEmpty) {
+                      await APIs.addChatUser(email).then((value) {
+                        if (!value) {
+                          Dialogs.showSnackbar(
+                              context, 'User does not Exists!');
+                        }
+                      });
+                    }
+
+                    // APIs.updateMessage(widget.message, updateMsg);
+                  },
+                  child: Text(
+                    "Add",
+                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                  ),
+                ),
+              ],
+            ));
   }
 }
