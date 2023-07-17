@@ -79,6 +79,7 @@ class _ChatPageState extends State<ChatPage> {
                         child: CachedNetworkImage(
                           width: mq.height * 0.055,
                           height: mq.height * 0.055,
+                          fit: BoxFit.fill,
                           imageUrl: listOf.isNotEmpty
                               ? listOf[0].image
                               : widget.user.image,

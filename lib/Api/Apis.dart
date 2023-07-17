@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:http/http.dart';
 import 'package:message_application/Models/chat_users.dart';
 import 'package:message_application/Models/message.dart';
@@ -23,10 +24,6 @@ class APIs {
   static User get user => auth.currentUser!;
 
   static FirebaseMessaging fmessaging = FirebaseMessaging.instance;
-
-  // CollectionReference getUserReference(){
-  //   return FirebaseFirestore.instance.collection('users').withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore)
-  // }
 
   static Future<void> getFirebaseMessagingToken() async {
     await fmessaging.requestPermission();
@@ -53,7 +50,7 @@ class APIs {
       final body = {
         "to": chatUser.pushToken,
         "notification": {
-          "title": chatUser.name,
+          "title": user.displayName,
           "body": msg,
           "android_channel_id": "chats"
         },

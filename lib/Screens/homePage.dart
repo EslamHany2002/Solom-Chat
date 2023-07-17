@@ -9,7 +9,7 @@ import 'package:message_application/Api/Apis.dart';
 import 'package:message_application/Helper/Dialog.dart';
 import 'package:message_application/Models/chat_users.dart';
 import 'package:message_application/Screens/Profile_page.dart';
-import 'package:message_application/Screens/Setting.dart';
+
 import 'package:message_application/Widgets/chat_card.dart';
 import 'package:message_application/main.dart';
 
@@ -221,24 +221,14 @@ class _HomePageState extends State<HomePage> {
                                         } else {
                                           return const Center(
                                             child: Text(
-                                              "No Connections Found !",
+                                              "No Chats Found !",
                                               style: TextStyle(fontSize: 20),
                                             ),
                                           );
                                         }
                                     }
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                      ),
-                                    );
                                   });
                           }
-                          return Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          );
                         },
                       ),
                     ),
@@ -278,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Icon(
                     Icons.person_add,
-                    color: Colors.blue,
+                    color: Color(0xff335061),
                     size: 28,
                   ),
                   Text(" Add User")
@@ -291,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                     hintText: 'Email Id',
                     prefixIcon: Icon(
                       Icons.email,
-                      color: Colors.blue,
+                      color: Color(0xff335061),
                     ),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15))),
@@ -303,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text(
                     "Cancel",
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                    style: TextStyle(fontSize: 16, color: Color(0xff335061)),
                   ),
                 ),
                 MaterialButton(
@@ -322,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text(
                     "Add",
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
+                    style: TextStyle(fontSize: 16, color: Color(0xff335061)),
                   ),
                 ),
               ],

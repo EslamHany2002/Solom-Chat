@@ -1,26 +1,24 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:message_application/Screens/SplachScreen.dart';
 
 
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 late Size mq;
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _initializeFirebase();
 
-    _initializeFirebase();
-    runApp(MyApp());
-  
-
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -31,8 +29,9 @@ class MyApp extends StatelessWidget{
   }
 }
 
-_initializeFirebase() async{
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+_initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,);
 
   var result = await FlutterNotificationChannel.registerNotificationChannel(
       description: 'For Showing Message Notification',

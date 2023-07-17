@@ -1,18 +1,11 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:message_application/Api/Apis.dart';
-import 'package:message_application/Helper/Dialog.dart';
+
 import 'package:message_application/Helper/My_Date.dart';
 import 'package:message_application/Models/chat_users.dart';
-import 'package:message_application/Screens/auth/login_screen.dart';
-import 'package:message_application/Screens/homePage.dart';
+import 'package:message_application/Widgets/show_Image.dart';
 
 import '../main.dart';
 
@@ -45,7 +38,6 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             toolbarHeight: 80,
-
             title: const Text("Profile"),
             centerTitle: true,
           ),
@@ -66,52 +58,81 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                       SizedBox(
                         height: mq.height * .02,
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(mq.height * .1),
-                        child: CachedNetworkImage(
-                          width: mq.height * 0.2,
-                          height: mq.height * 0.2,
-                          fit: BoxFit.cover,
-                          imageUrl: widget.user.image,
-                          errorWidget: (context, url, error) =>
-                              const CircleAvatar(
-                                  child: Icon(CupertinoIcons.person)),
+                      InkWell(
+                        onTap: (){
+                          showDialog(context: context, builder: (_) => ShowImage(user: widget.user,));
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(mq.height * .1),
+                          child: CachedNetworkImage(
+                            width: mq.height * 0.2,
+                            height: mq.height * 0.2,
+                            fit: BoxFit.cover,
+                            imageUrl: widget.user.image,
+                            errorWidget: (context, url, error) =>
+                                const CircleAvatar(
+                                    child: Icon(CupertinoIcons.person)),
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: mq.height * .03,
                       ),
-
                       ListTile(
-                        leading: Icon(Icons.email_outlined , color: Color(0xff335061), size: 35,),
-                        title: Text("Email" , style: TextStyle(fontSize: 15),),
-                        subtitle: Text(widget.user.email , style: TextStyle(fontSize: 16),),
+                        leading: Icon(
+                          Icons.email_outlined,
+                          color: Color(0xff335061),
+                          size: 35,
+                        ),
+                        title: Text(
+                          "Email",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        subtitle: Text(
+                          widget.user.email,
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-
                       Container(
                         width: mq.width * 0.8,
                         height: 1,
                         color: Colors.black38,
                       ),
-
                       ListTile(
-                        leading: Icon(Icons.person_outline , color: Color(0xff335061), size: 35,),
-                        title: Text("Name" , style: TextStyle(fontSize: 15),),
-                        subtitle: Text(widget.user.name , style: TextStyle(fontSize: 16),),
+                        leading: Icon(
+                          Icons.person_outline,
+                          color: Color(0xff335061),
+                          size: 35,
+                        ),
+                        title: Text(
+                          "Name",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        subtitle: Text(
+                          widget.user.name,
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-
                       Container(
                         width: mq.width * 0.8,
                         height: 1,
                         color: Colors.black38,
                       ),
-
                       ListTile(
-                        leading: Icon(Icons.info_outline , color: Color(0xff335061), size: 35,),
-                        title: Text("About" , style: TextStyle(fontSize: 15),),
-                        subtitle: Text(widget.user.about , style: TextStyle(fontSize: 16),),
+                        leading: Icon(
+                          Icons.info_outline,
+                          color: Color(0xff335061),
+                          size: 35,
+                        ),
+                        title: Text(
+                          "About",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        subtitle: Text(
+                          widget.user.about,
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-
                     ],
                   ),
                 ),
@@ -122,9 +143,20 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
           floatingActionButton: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-              Text("Joined on : " , style: TextStyle(color: Colors.black87,fontWeight: FontWeight.w500,fontSize: 16),),
-              Text(My_Date.getLastMessageTime(context: context, time: widget.user.createdAt , showYear: true) , style: TextStyle(color: Colors.black54 , fontSize: 16),)
+              Text(
+                "Joined on : ",
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
+              ),
+              Text(
+                My_Date.getLastMessageTime(
+                    context: context,
+                    time: widget.user.createdAt,
+                    showYear: true),
+                style: TextStyle(color: Colors.black54, fontSize: 16),
+              )
             ],
           ),
         ),

@@ -12,6 +12,7 @@ import 'package:message_application/Helper/Dialog.dart';
 import 'package:message_application/Models/chat_users.dart';
 import 'package:message_application/Screens/auth/login_screen.dart';
 import 'package:message_application/Screens/homePage.dart';
+import 'package:message_application/Widgets/show_Image.dart';
 
 import '../main.dart';
 
@@ -64,7 +65,7 @@ class _Profile_pageState extends State<Profile_page> {
                     MaterialPageRoute(builder: (context) => const HomePage()));
               },
             ),
-            title: const Text("Profile"),
+            title: const Text("My Profile"),
             centerTitle: true,
           ),
           body: Container(
@@ -98,19 +99,24 @@ class _Profile_pageState extends State<Profile_page> {
                                       height: mq.height * 0.2,
                                       fit: BoxFit.cover,
                                     ))
-                                : ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(mq.height * .1),
-                                    child: CachedNetworkImage(
-                                      width: mq.height * 0.2,
-                                      height: mq.height * 0.2,
-                                      fit: BoxFit.cover,
-                                      imageUrl: widget.user.image,
-                                      errorWidget: (context, url, error) =>
-                                          const CircleAvatar(
-                                              child: Icon(CupertinoIcons.person)),
+                                : InkWell(
+                              onTap: (){
+                                showDialog(context: context, builder: (_) => ShowImage(user: widget.user,));
+                              },
+                                  child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(mq.height * .1),
+                                      child: CachedNetworkImage(
+                                        width: mq.height * 0.2,
+                                        height: mq.height * 0.2,
+                                        fit: BoxFit.cover,
+                                        imageUrl: widget.user.image,
+                                        errorWidget: (context, url, error) =>
+                                            const CircleAvatar(
+                                                child: Icon(CupertinoIcons.person)),
+                                      ),
                                     ),
-                                  ),
+                                ),
                             Positioned(
                               bottom: 0,
                               right: 0,
@@ -148,7 +154,7 @@ class _Profile_pageState extends State<Profile_page> {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(
                               Icons.person,
-                              color: Colors.blue,
+                              color: Color(0xff335061),
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12)),
@@ -168,7 +174,7 @@ class _Profile_pageState extends State<Profile_page> {
                           decoration: InputDecoration(
                             prefixIcon: const Icon(
                               Icons.info_outline,
-                              color: Colors.blue,
+                              color: Color(0xff335061),
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12)),

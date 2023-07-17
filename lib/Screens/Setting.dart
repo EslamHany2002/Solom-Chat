@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:message_application/Screens/homePage.dart';
@@ -56,7 +56,7 @@ class _SettingState extends State<Setting> {
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                   elevation: 0.0
                 ),
                 onPressed: () {},

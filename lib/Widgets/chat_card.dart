@@ -58,7 +58,7 @@ class _PersonState extends State<Person> {
 
                         borderRadius: BorderRadius.circular(mq.height * .5),
                         child: CachedNetworkImage(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           width: mq.height * 0.060,
                           height: mq.height * 0.060,
                           imageUrl: widget.user.image,
